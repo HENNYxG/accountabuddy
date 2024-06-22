@@ -1,0 +1,56 @@
+        .card {
+            width: 150px;
+            height: 200px;
+            background-color: #A0522D;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            color: white;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+        .card .top-icons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 24px;
+        }
+        .card .top-icons .user-icon,
+        .card .top-icons .streak {
+            display: flex;
+            align-items: center;
+        }
+        .card .top-icons .streak .fire-icon {
+            margin-left: 5px;
+        }
+        .card .circle-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 20px 0;
+            //outline: solid #fff 1px;
+        }
+        .card .circle-container svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+        .card .circle-container svg circle {
+            fill: none;
+            stroke: white;
+            stroke-width: 10;
+        }
+        .card .circle-container .icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .card .habit-name {
+            font-size: 18px;
+        }

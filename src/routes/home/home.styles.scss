@@ -1,0 +1,52 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+
+  .content {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 1rem;
+    }
+
+    .link {
+      text-decoration: none;
+
+      .btn {
+        background-color: #2563eb;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 1.25rem;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover {
+          background-color: #1e3a8a;
+        }
+      }
+    }
+  }
+}

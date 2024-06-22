@@ -1,0 +1,16 @@
+.navbar-1 {
+    padding: 8px;
+    padding-left: 20px ;
+    padding-right: 20px ;
+}
+    .navbar-2 {
+        @media (min-width: 640px) { // "sm" breakpoint starts at 640px by default in Tailwind CSS
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+    }
+
+.navbar-3 {
+    
+}

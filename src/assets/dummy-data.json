@@ -1,0 +1,24 @@
+dummyData = {
+    "name": "John Doe",
+    "habitID": "123456",
+    "habitName": "Exercise",
+    "habitType": "Daily",
+    "habitGoal": "30 minutes",
+    "habitStartDate": "2021-01-01",
+    "habitEndDate": "2021-12-31",
+    "habitProgress": "10 minutes",
+    "habitStatus": "Not completed",
+    "habitNotes": "I feel great after exercising!",
+    "habitHistory": [
+        {
+            "date": "2021-01-01",
+            "habitStatus": "completed",
+            "habitNotes": "I feel great after exercising!"
+        },
+        {
+            "date": "2021-01-02",
+            "progress": "30 minutes",
+            "habitNotes": "I feel great after exercising!"
+        }
+    ]
+    }
