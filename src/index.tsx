@@ -17,8 +17,10 @@ import SignInPage from "./routes/sign-in";
 import SignUpPage from "./routes/sign-up";
 import Dashboard from "./routes/dashboard/dashboard.component";
 import DashboardView from "./routes/dashboard-view/dashboard-view.component";
-import NewUserPage from "./routes/new-user-page";
 import NewUser from "./routes/new-user";
+
+//Import Providers
+import { MenuProvider } from "./contexts/menu.context";
 
 
 // import React from 'react';
@@ -62,7 +64,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router} />
+        <MenuProvider>
+          <RouterProvider router={router} />
+        </MenuProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

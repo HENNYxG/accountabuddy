@@ -1,0 +1,44 @@
+/**
+* @license
+*
+* Font Family: Cirka Display
+* Designed by: Indian Type Foundry
+* URL: https://www.public/fonts/cirkahare.com/public/fonts/cirka/cirka
+* © 2024 Indian Type Foundry
+*
+
+*/
+
+@font-face {
+  font-family: 'Cirka-Light';
+  src: url('../../public/fonts/cirka/Cirka-Light.woff') format('woff'),
+       url('../../public/fonts/cirka/Cirka-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cirka-Regular';
+  src: url('../../public/fonts/cirka/Cirka-Regular.woff') format('woff'),
+       url('../../public/fonts/cirka/Cirka-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cirka-Medium';
+  src: url('../../public/fonts/cirka/Cirka-Medium.woff') format('woff'),
+       url('../../public/fonts/cirka/Cirka-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cirka-Bold';
+  src: url('../../public/fonts/cirka/Cirka-Bold.woff') format('woff'),
+       url('../../public/fonts/cirka/Cirka-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+

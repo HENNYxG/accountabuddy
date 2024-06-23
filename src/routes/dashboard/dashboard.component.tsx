@@ -1,18 +1,48 @@
-import "./dashboard.styles.scss";
-import HabitCard from "../../components/habit-card/habit-card.component";
-import { useUser } from "@clerk/clerk-react";
+import { useContext, useEffect, useState } from "react";
+import { menuItemType } from "../../types/menuItemType";
+import { MenuContext } from "../../contexts/menu.context";
+
+import DashboardPage from "../../pages/dashboard-page/dashboard.page";
+import AllHabitsPage from "../../pages/all-habits/all-habits.page";
+import BuddyPage from "../../pages/buddy/buddy.page";
+import TrendsPage from "../../pages/trends/trends.page";
+import ChatPage from "../../pages/chat/chat.page";
 
 const Dashboard = () => {
-  const {user} = useUser();
-  console.log(user)
-  console.log("hello")
+  const { menuItems } = useContext(MenuContext);
+  const [selectedMenu, setSelectedMenu] = useState<menuItemType | null>(null);
+  let selectComponent = null;
+
+  useEffect(() => {
+    menuItems.map((singleItem) => {
+      if (singleItem.isSelected) {
+        setSelectedMenu(singleItem);
+      }
+    });
+  }, [menuItems]);
+
+  switch (selectedMenu?.name) {
+    case "Dashboard":
+      selectComponent = <DashboardPage />;
+      break;
+    case "All Habits":
+      selectComponent = <AllHabitsPage />;
+      break;
+    case "Friends":
+      selectComponent = <BuddyPage />;
+      break;
+    case "Trends":
+      selectComponent = <TrendsPage />;
+      break;
+    case "Chat":
+      selectComponent = <ChatPage />;
+      break;
+    default:
+      selectComponent = <DashboardPage />;
+  }
   return (
-    <div className="w-100vw h-100vh ">
-      <h1 className="text-4xl font-bold pb-5">Dashboard </h1>
-      <div className="habits-dashboard-card">
-        <HabitCard />
-        <HabitCard />
-      </div>
+    <div className="flex">
+      {selectComponent}
     </div>
   );
 };

@@ -1,0 +1,14 @@
+.home-dashboard {
+    width: 100vw;
+
+}
+.habits-dashboard-card {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    background-color: #c4c4c4;
+    padding: 10px;
+    border-radius: 15px;
+    width: 100%;
+    min-width: 50vw;
+}

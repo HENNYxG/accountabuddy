@@ -31,14 +31,14 @@ const HabitCard = () => {
             cx="50"
             cy="50"
             r="45"
-            stroke-dasharray="283"
+            strokeDasharray="283"
             stroke-dashoffset="0"
           ></circle>
           <circle
             cx="50"
             cy="50"
             r="45"
-            stroke-dasharray="283"
+            strokeDasharray="283"
             stroke-dashoffset="283"
             id="progress"
           ></circle>
