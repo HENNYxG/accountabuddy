@@ -15,7 +15,7 @@ datasource db {
   relationMode = "prisma"
 }
 
-model user {
+model User {
   id      String  @id @default(uuid())
   email   String  @unique
   name    String?
@@ -23,4 +23,51 @@ model user {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  //outbound link. one to many
+  habits Habit[]
+  habitGroups HabitGroups[]
+}
+
+model HabitGroups {
+  id String @id @default(uuid())
+
+  groupName String
+  color_code String
+  icon_name String
+  
+   //linking to foreign key
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, id])
+}
+
+model Habit {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  habitName String
+  iconName String
+  color String
+  isNegative Boolean
+  order Int
+
+
+  //linking to foreign key
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  //outbound reference
+  entries HabitEntries[]
+  @@unique([userId, id])
+}
+
+model HabitEntries {
+  id String @id @default(uuid())
+
+  habitName String
+  habit Habit @relation(fields: [habitName], references: [id])
+
+  @@unique([habitName, id])
 }

@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { prisma } from "./db";
-import { User } from "@prisma/client";
+import { user } from "@prisma/client";
 
 
     

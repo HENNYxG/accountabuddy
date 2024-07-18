@@ -2,6 +2,7 @@ import * as React from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { Outlet, useNavigate } from "react-router-dom";
 import DashboardView from "../routes/dashboard-view/dashboard-view.component";
+import Spinner from "../components/spinner";
 
 export default function DashboardLayout() {
   const { userId, isLoaded } = useAuth();
@@ -15,7 +16,11 @@ export default function DashboardLayout() {
     }
   }, [isLoaded]);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return (
+    <div className="flex items-center justify-center h-screen">
+      <Spinner />
+    </div>
+  );
 
   return (
     <>

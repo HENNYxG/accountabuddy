@@ -4,14 +4,20 @@ import { useUser } from "@clerk/clerk-react";
 import { user } from "@prisma/client";
 
 
-
+type NewUser = {
+  clerkId: string;
+  emailAddresses: Array;
+  email: string;
+  name: string;
+  username: string;
+};
 
 const createNewUser = async (user: user) => {
     try {
         const response = await axios.post("http://localhost:4000/newuser", {
           data: {
             clerkId: user.id as string,
-            email: user.emailAddresses[0].emailAddress,
+            email: user.emailAddresses[0].emailAddress as string,
             name: user.username,
           },
         });

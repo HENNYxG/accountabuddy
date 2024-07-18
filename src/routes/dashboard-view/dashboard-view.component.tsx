@@ -9,7 +9,7 @@ const DashboardView = () => {
   return (
     <div className="grid grid-cols-[300px_auto] h-screen w-screen">
       <Sidebar />
-      <div className="flex flex-col gap-2 p-10 w-full h-full overflow-y-auto bg-backgroundIvory ">
+      <div className="flex flex-col gap-2 p-2 w-full h-full overflow-y-auto bg-backgroundIvory ">
         <Outlet />
       </div>
     </div>
