@@ -12,7 +12,7 @@ import Home from "./routes/home/home.component";
 import SignInPage from "./routes/sign-in";
 import SignUpPage from "./routes/sign-up";
 import Dashboard from "./routes/dashboard/dashboard.component";
-import DashboardView from "./routes/dashboard-view/dashboard-view.component";
+import DashboardView from "./routes/application-view/dashboard-view.component";
 import NewUser from "./routes/new-user";
 
 

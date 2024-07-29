@@ -1,8 +1,10 @@
 import * as React from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { Outlet, useNavigate } from "react-router-dom";
-import DashboardView from "../routes/dashboard-view/dashboard-view.component";
+import DashboardView from "../routes/application-view/dashboard-view.component";
 import Spinner from "../components/spinner";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function DashboardLayout() {
   const { userId, isLoaded } = useAuth();
@@ -24,7 +26,10 @@ export default function DashboardLayout() {
 
   return (
     <>
-      <DashboardView />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DashboardView />
+      </LocalizationProvider>
+
       {/* <div className="bg-black">
         <Outlet />
       </div> */}

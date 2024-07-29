@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './routes/home/home.component';
 import Dashboard from './routes/dashboard/dashboard.component';
-import DashboardView from "./routes/dashboard-view/dashboard-view.component";
+import DashboardView from "./routes/application-view/dashboard-view.component";
 
 import './App.css';
 import { SignIn } from '@clerk/clerk-react';

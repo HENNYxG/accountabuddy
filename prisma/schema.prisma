@@ -27,6 +27,21 @@ model User {
   //outbound link. one to many
   habits Habit[]
   habitGroups HabitGroups[]
+  userSettings UserSettings[]
+}
+
+model UserSettings {
+  id String @id @default(uuid())
+
+  displayFullName Boolean
+
+  //linking to foreign key
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+
+  
+  @@unique([userId, id])
 }
 
 model HabitGroups {
@@ -71,3 +86,4 @@ model HabitEntries {
 
   @@unique([habitName, id])
 }
+

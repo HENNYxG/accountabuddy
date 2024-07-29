@@ -7,11 +7,15 @@ import AllHabitsPage from "../../pages/all-habits/all-habits.page";
 import BuddyPage from "../../pages/buddy/buddy.page";
 import TrendsPage from "../../pages/trends/trends.page";
 import ChatPage from "../../pages/chat/chat.page";
+import DotPattern from "../../components/backgrounds/dot-pattern-bg.component";
+import { darkModeColor, lightModeColor } from "../../utils/colors";
+
 
 const Dashboard = () => {
-  const { menuItems } = useContext(MenuContext);
+  const { menuItems, darkMode } = useContext(MenuContext);
   const [selectedMenu, setSelectedMenu] = useState<menuItemType | null>(null);
   let selectComponent = null;
+
 
   useEffect(() => {
     menuItems.map((singleItem) => {
@@ -41,8 +45,12 @@ const Dashboard = () => {
       selectComponent = <DashboardPage />;
   }
   return (
-    <div className="flex">
+    <div className="flex relative">
       {selectComponent}
+
+      {/* <div className="z-10">
+      <DotPattern />
+      </div> */}
     </div>
   );
 };

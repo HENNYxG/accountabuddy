@@ -16,11 +16,12 @@ import Home from "./routes/home/home.component";
 import SignInPage from "./routes/sign-in";
 import SignUpPage from "./routes/sign-up";
 import Dashboard from "./routes/dashboard/dashboard.component";
-import DashboardView from "./routes/dashboard-view/dashboard-view.component";
+import DashboardView from "./routes/application-view/dashboard-view.component";
 import NewUser from "./routes/new-user";
 
 //Import Providers
 import { MenuProvider } from "./contexts/menu.context";
+// import { UserPrefsProvider } from "./contexts/userprefs.context";
 
 
 // import React from 'react';
@@ -64,9 +65,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+
         <MenuProvider>
-          <RouterProvider router={router} />
+            <RouterProvider router={router} />
         </MenuProvider>
+
       </PersistGate>
     </Provider>
   </React.StrictMode>

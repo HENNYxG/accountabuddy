@@ -1,5 +1,6 @@
 import RunningIcon from "../../assets/icons/running-icon";
 import { useState } from "react";
+import { customCharcoal } from "../../utils/colors";
 
 const HabitIcon = () => {
     const [isClicked, setIsClicked] = useState(false)
@@ -10,7 +11,7 @@ const HabitIcon = () => {
     }
     return (
       <div onClick={onClickHandler}>
-        <RunningIcon color="#fff" width="60px" height="60px" />
+        <RunningIcon color={ customCharcoal } width="60px" height="60px" />
       </div>
     );
 }
