@@ -1,5 +1,9 @@
 import { SignUp } from "@clerk/clerk-react";
 
 export default function SignUpPage() {
-  return <SignUp path="/sign-up" forceRedirectUrl="/new-user" />;
+  return (
+    <div className="flex justify-center items-center flex-col gap-10 w-full h-screen bg-customGreen">
+      <SignUp path="/sign-up" forceRedirectUrl="/new-user" />
+    </div>
+  );
 }

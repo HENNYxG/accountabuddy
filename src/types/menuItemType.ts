@@ -1,7 +1,15 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+// import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { ReactNode } from "react";
 
 export type menuItemType = {
   name: string;
   isSelected: boolean;
-  icon: IconProp;
+  icon: ReactNode;
 };
+
+
+// export type habitWindowObject = {
+//   habitWindowOpen: boolean;
+//   setHabitWindowOpen:
+// }
+

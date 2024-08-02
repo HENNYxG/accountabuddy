@@ -72,7 +72,7 @@ const SidebarButtons = () => {
 
 
 
-const SidebarButton = ({icon, name}) => {
+const SidebarButton = ({icon, name}: {icon: JSX.Element, name: string}) => {
     return (
       <Link
         className="flex items-center p-3  rounded hover:bg-gray-300 transition"

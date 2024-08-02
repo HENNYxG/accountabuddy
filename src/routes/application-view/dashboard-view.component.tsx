@@ -4,24 +4,23 @@ import {UserButton} from "@clerk/clerk-react";
 //import './Sidebare.style.scss';
 import { ReactComponent as HomeIcon } from "../../assets/home-icon.svg"
 import Sidebar, { SidebarTwo } from "../../components/sidebar/sidebar.component";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";
 import DotPattern from "../../components/backgrounds/dot-pattern-bg.component";
 import GridPattern from "../../components/backgrounds/grid-pattern-bg.component";
 import { cn } from "../../utils/utils";
 import { darkModeColor, lightModeColor } from "../../utils/colors";
+import { Toaster } from "react-hot-toast";
 
 
 const DashboardView = () => {
-  const { expanded, setExpanded, darkMode } = useContext(MenuContext);
+  const { expanded, setExpanded, darkMode } = useContext(UIContext);
 
   
   const handleResize = () => {
   if (window.innerWidth < 720) {
       setExpanded(false)
-  } else {
-      setExpanded(true);
-  }
+  } 
 }
 useEffect(() => {
   window.addEventListener("resize", handleResize);
@@ -49,6 +48,7 @@ useEffect(() => {
       className="transition-all"
 
     >
+      <Toaster />
       <div
         className={`max-sm:flex grid h-screen w-screen overflow-y-hidden  transition-all ${
           expanded ? "grid-cols-[300px_auto]  " : "grid-cols-[80px_auto]"

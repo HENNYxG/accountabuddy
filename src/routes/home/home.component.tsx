@@ -23,9 +23,9 @@ const Home = () => {
         >
           Lets get started
         </Link>
-        {/* <div className="absolute bottom-12">
+        <div className="absolute bottom-12">
           <GlowButton />
-        </div> */}
+        </div>
       </div>
     </>
   );

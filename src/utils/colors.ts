@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { UserPrefsContext } from "../contexts/userprefs.context";
+import { HabitsContext } from "../contexts/habits.context";
 
 export const defaultColor = {
     default: "#d90429",
@@ -34,7 +34,7 @@ export const darkModeColor = {
 
 
 // export const setColor = () => {
-//     const { darkMode } = useContext(UserPrefsContext);
+//     const { darkMode } = useContext(HabitsContext);
 //     const [color, setColor] = useState({
 //       background: "#27272A",
 //       text: "#E4E1DA",

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 
 import { menuItemType } from "../../types/menuItemType";
 import { SignOutButton } from "@clerk/clerk-react";
@@ -8,7 +8,7 @@ import { SignOutButton } from "@clerk/clerk-react";
 
 const SidebarNav = () => {
   const { menuItems, setMenuItems, expanded, darkModeColor, lightModeColor } =
-    useContext(MenuContext);
+    useContext(UIContext);
 
   
 
@@ -29,8 +29,8 @@ const SidebarNav = () => {
 
 
 
-export function SingleMenuItem({ menuItemProp }: { menuItemProp: MenuItemType }) {
-     const { menuItems, setMenuItems, expanded } = useContext(MenuContext);    
+export function SingleMenuItem({ menuItemProp }: { menuItemProp: menuItemType }) {
+     const { menuItems, setMenuItems, expanded } = useContext(UIContext);    
      
         const handleMenuCLick = () => {
           const menuListCopy = menuItems.map((menuItem) => {

@@ -1,10 +1,10 @@
 import { defaultColor } from "../../utils/colors";
 import AppIcon from "../app-icon/app-icon.component";
 import { useContext } from "react";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 
 const LogoAndName = () => {
-  const { expanded } = useContext(MenuContext);
+  const { expanded } = useContext(UIContext);
   if (expanded) {
     return (
       <div className="flex gap-2 items-center sm:justify-start justify-center">

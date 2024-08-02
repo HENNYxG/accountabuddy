@@ -1,11 +1,11 @@
 import { PieChart, Pie, Cell } from "recharts";
-import { defaultColor, defaultGreen } from "../../utils/colors";
-import { MenuContext } from "../../contexts/menu.context";
+import { defaultColor } from "../../utils/colors";
+import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";
 
 const DayProgressCard = () => {
       const { darkMode, darkModeColor, lightModeColor } =
-        useContext(MenuContext);
+        useContext(UIContext);
   
     const statisticsInfo = [
       { id: 1, num: 7, subTitle: "Best streaks" },

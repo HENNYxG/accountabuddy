@@ -7,7 +7,7 @@ import ChevronLeftIcon from "../../assets/icons/chevron-left-icon";
 import ChevronRightIcon from "../../assets/icons/chevron-right-icon";
 import TripleDotVertical from "../../assets/icons/triple-dot-vertical-icon";
 import { useContext } from "react";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 import { menuItemType } from "../../types/menuItemType";
 
 
@@ -65,7 +65,7 @@ export default Sidebar;
 export const SidebarTwo = () => {
   const { user } = useUser();
   const { expanded, setExpanded, darkMode, darkModeColor, lightModeColor } =
-    useContext(MenuContext);
+    useContext(UIContext);
 
   
        const userButtonAppearance = {
@@ -93,7 +93,7 @@ export const SidebarTwo = () => {
           }`}
         >
           <button
-            onClick={() => setExpanded((curr) => !curr)}
+            onClick={() => setExpanded(!expanded)}
             className="flex align-center z-50 justify-center  py-1.5 rounded-lg w-14 bg-gray-50 transition-all dark:bg-customGreen dark:hover:bg-[#efff62] hover:bg-gray-100"
           >
             {expanded ? (

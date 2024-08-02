@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useState, useContext } from "react";
-import { MenuContext } from "../contexts/menu.context";
+import { UIContext } from "../contexts/ui.context";
 
  
 const DarkMode = () => {
   const { darkMode, setDarkMode, darkModeColor, lightModeColor } =
-    useContext(MenuContext);
+    useContext(UIContext);
 
   function toggleDarkMode() {
     if (!darkMode) {

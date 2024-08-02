@@ -1,9 +1,12 @@
 import ArrowLeftCircleOutline from "../../assets/icons/arrow-left-circle-outline-icon";
 import ArrowRightCircleOutline from "../../assets/icons/arrow-right-circle-outline-icon";
 import PlusRoundedIcon from "../../assets/icons/plus-rounded-icon";
+import { UIContext } from "../../contexts/ui.context";
+import { useContext } from "react";
 
 // habitscontainertop
 const DateContainerTop = () => {
+  const { setHabitWindowOpen } = useContext(UIContext);
     return (
       <div className="p-3 flex justify-between items-center">
         {/* date and arrows*/}
@@ -40,7 +43,8 @@ const DateContainerTop = () => {
             <span className="font-clash-medium">New Group</span>
                 </button>
                 
-          <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm ">
+          <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm "
+          onClick={()=>{setHabitWindowOpen(true);}}>
             <PlusRoundedIcon color="#FFFFFF" width="20px" height="20px" />
             <span className="font-clash-medium">New Habit</span>
           </button>

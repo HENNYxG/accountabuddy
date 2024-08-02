@@ -1,23 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
-import { user } from "@prisma/client";
 
 
-type NewUser = {
-  clerkId: string;
-  emailAddresses: Array;
+type User = {
+  id: string;
   email: string;
-  name: string;
-  username: string;
+  name: string | null;
+  clerkId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  emailAddresses: Array<{ emailAddress: string }>;
+  username: string; // Add the 'username' property
 };
 
-const createNewUser = async (user: user) => {
+const createNewUser = async (user: User) => {
     try {
         const response = await axios.post("http://localhost:4000/newuser", {
           data: {
-            clerkId: user.id as string,
-            email: user.emailAddresses[0].emailAddress as string,
+            clerkId: user.id,
+            email: user.emailAddresses[0].emailAddress,
             name: user.username,
           },
         });
@@ -34,17 +36,31 @@ const createNewUser = async (user: user) => {
 const NewUser = () => {
     const { user } = useUser();
     console.log(user)
-
+    const hasUserBeenCreated = useRef(false);
 
 
   useEffect(() => {
-      if (user) {
-        console.log("use effect launch")
-        createNewUser(user);
-    }
+      if (user && !hasUserBeenCreated.current) {
+        console.log("use effect launch");
+        const mappedUser: User = {
+          id: user.id,
+          email: user.primaryEmailAddress?.emailAddress || "",
+          name: user.fullName,
+          clerkId: user.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          emailAddresses: user.emailAddresses.map((email) => ({
+            emailAddress: email.emailAddress,
+          })),
+          username: user.username || "",
+        };
+        createNewUser(mappedUser);
+        hasUserBeenCreated.current = true;
+      }
   }, [user]);
 
   return <div>Loading...</div>;
 };
 
 export default NewUser;
+

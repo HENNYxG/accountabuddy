@@ -1,11 +1,11 @@
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { defaultColor } from "../../utils/colors";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";
 
 const CalendarMUI = () => {
         const { darkMode, darkModeColor, lightModeColor } =
-          useContext(MenuContext);
+          useContext(UIContext);
   
     return (
       <div

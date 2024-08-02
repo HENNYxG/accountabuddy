@@ -20,8 +20,8 @@ import DashboardView from "./routes/application-view/dashboard-view.component";
 import NewUser from "./routes/new-user";
 
 //Import Providers
-import { MenuProvider } from "./contexts/menu.context";
-// import { UserPrefsProvider } from "./contexts/userprefs.context";
+import { UIProvider } from "./contexts/ui.context";
+import { HabitsProvider } from "./contexts/habits.context";
 
 
 // import React from 'react';
@@ -65,11 +65,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-
-        <MenuProvider>
+        <UIProvider>
+          <HabitsProvider>
             <RouterProvider router={router} />
-        </MenuProvider>
-
+          </HabitsProvider>
+        </UIProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

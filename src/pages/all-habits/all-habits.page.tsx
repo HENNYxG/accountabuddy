@@ -1,6 +1,6 @@
 
 import { useContext } from "react";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 import ArrowLeftCircleOutline from "../../assets/icons/arrow-left-circle-outline-icon";
 import ArrowRightCircleOutline from "../../assets/icons/arrow-right-circle-outline-icon";
 import { darkModeColor, lightModeColor } from "../../utils/colors";
@@ -9,6 +9,7 @@ import HabitGroup from "../../components/habit-group/habit-group-container.compo
 import DarkMode from "../../components/dark-mode-toggle.component";
 import DateContainerTop from "../../components/filter-containers/date-container-top.component";
 import AllHabitsRightSidebar from "../../components/right-sidebar/all-habits-right-sidebar.component";
+import HabitWindow from "../../components/habit-window/habit-window.component";
 
 const AllHabitsPage = () => {
 
@@ -18,7 +19,8 @@ const AllHabitsPage = () => {
     //   {/* <h1 className="text-5xl font-extrabold pb-5">Dashboard </h1> */}
 
     <div 
-      className="max-xl:flex-col gap-4 w-full flex flex-row p-3 " >
+      className="max-xl:flex-col gap-4 w-full flex flex-row p-3 relative " >
+      <HabitWindow />
       <div className="flex-grow">
         <TopWelcomeBar />
         <DateContainerTop />
@@ -47,7 +49,7 @@ const RightSideBar = () => {
 
 const TopWelcomeBar = () => {
       const { darkMode, darkModeColor, lightModeColor } =
-        useContext(MenuContext);
+        useContext(UIContext);
   return (
     <div
       style={{

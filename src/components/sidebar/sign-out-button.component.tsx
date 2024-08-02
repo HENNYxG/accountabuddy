@@ -1,14 +1,14 @@
 import { SignOutButton } from "@clerk/clerk-react";
 import SignOutIconTwo from "../../assets/icons/signout-icon";
 import { useContext } from "react";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 import { useClerk } from "@clerk/clerk-react";
 
 const iconSize = "80px";
 const iconColor = "#000";
 
 const LogOutButton = () => {
-  const { expanded } = useContext(MenuContext);
+  const { expanded } = useContext(UIContext);
   const {signOut} = useClerk();
     return (
       <div

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { menuItemType } from "../../types/menuItemType";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 
 import DashboardPage from "../../pages/dashboard-page/dashboard.page";
 import AllHabitsPage from "../../pages/all-habits/all-habits.page";
@@ -12,7 +12,7 @@ import { darkModeColor, lightModeColor } from "../../utils/colors";
 
 
 const Dashboard = () => {
-  const { menuItems, darkMode } = useContext(MenuContext);
+  const { menuItems, darkMode } = useContext(UIContext);
   const [selectedMenu, setSelectedMenu] = useState<menuItemType | null>(null);
   let selectComponent = null;
 
@@ -47,7 +47,7 @@ const Dashboard = () => {
   return (
     <div className="flex relative">
       {selectComponent}
-
+    <BlackSoftLayer />
       {/* <div className="z-10">
       <DotPattern />
       </div> */}
@@ -56,3 +56,15 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+const BlackSoftLayer = () => {
+  const { habitWindowOpen, expanded } = useContext(UIContext);
+  
+  return (
+    <div
+      className={`w-full h-full bg-black fixed top-0 left-0 opacity-20 z-50 ${
+         habitWindowOpen ? "fixed" : "hidden"
+      }`}
+    ></div>
+  );
+}

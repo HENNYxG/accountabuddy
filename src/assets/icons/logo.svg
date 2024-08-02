@@ -12,8 +12,8 @@
       <span style="font-size: 1.5rem; font-weight: 300; display: flex; align-items: center; gap: 0.5rem;">
         <div style="padding: 0.5rem 0.5rem 0.5rem 0.5rem; border-radius: 0.375rem; background-color: rgb(217, 4, 41); display: flex;">
           <svg fill="#ffffff" height="30" width="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
               <g>
                 <g>

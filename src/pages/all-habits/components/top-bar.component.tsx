@@ -1,9 +1,9 @@
-import { MenuContext } from "../../../contexts/menu.context";
+import { UIContext } from "../../../contexts/ui.context";
 import { useContext } from "react";
 
 const AllHabitsTopBar = () => {
       const { darkMode, darkModeColor, lightModeColor } =
-        useContext(MenuContext);
+        useContext(UIContext);
   
   return (
     <div

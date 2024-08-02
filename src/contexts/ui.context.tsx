@@ -8,6 +8,8 @@ import BuddyIcon from '../assets/icons/buddy-icon';
 import AnalysisIcon from '../assets/icons/analysis-icon';
 import ChatIcon from '../assets/icons/chat-icon';
 
+
+
 const expandedLogic = () => {
   if (window.innerWidth > 720) {
     return true;
@@ -16,13 +18,13 @@ const expandedLogic = () => {
   }
 }
 // Create a new context
-export const MenuContext = createContext({
-  menuItems: [],
-  setMenuItems: () => {},
+export const UIContext = createContext({
+  menuItems: [] as menuItemType[],
+  setMenuItems: (menuItems: Array<menuItemType>) => {},
   expanded: true,
-  setExpanded: () => {},
+  setExpanded: (expanded: boolean) => {},
   darkMode: false,
-  setDarkMode: () => {},
+  setDarkMode: (darkMode: boolean) => {},
   lightModeColor: {
     background: "#E4E1DA",
     secondaryBackground: "#ffffff",
@@ -33,13 +35,21 @@ export const MenuContext = createContext({
     secondary: "#FF0000",
     tertiary: "#E9FF20",
     iconColor: "#000000",
+    greyBG: "#f3f4f6",
+    greyText: "#9ca3af",
+    mutedGreen: "#f5ff97",
   },
   darkModeColor: {
     background: "#121212",
     secondaryBackground: "#27272A",
     text: "#E4E1DA",
     iconColor: "#ffffff",
+    greyBG: "#374151",
   },
+  habitWindowOpen: false,
+  setHabitWindowOpen: (habitWindowOpen: boolean) => {},
+  timePickerWindowOpen: false,
+  setTimePickerWindowOpen: (timePickerWindowOpen: boolean) => {},
 });
 
 
@@ -48,12 +58,13 @@ export const MenuContext = createContext({
 
 
 // Create a context provider component
-export const MenuProvider = ({ children }: { children: ReactNode }) => {
+export const UIProvider = ({ children }: { children: ReactNode }) => {
   const [darkMode, setDarkMode] = useState(false);
+  const [habitWindowOpen, setHabitWindowOpen] = useState(false);
+  const [timePickerWindowOpen, setTimePickerWindowOpen] = useState(false);
   const iconColor = "#000000";
   const iconSize = "80px";
 
-  ;
   
     const [menuItems, setMenuItems] = useState<menuItemType[]>([
       {
@@ -108,12 +119,16 @@ export const MenuProvider = ({ children }: { children: ReactNode }) => {
     secondary: "#FF0000",
     tertiary: "#E9FF20",
     iconColor: "#000000",
+    greyBG: "#f3f4f6",
+    greyText: "#9ca3af",
+    mutedGreen: "#f5ff97",
   };
   const darkModeColor = {
     background: "#121212",
     secondaryBackground: "#27272A",
     text: "#E4E1DA",
     iconColor: "#ffffff",
+    greyBG: "#374151",
   };
 
   useEffect(() => {
@@ -127,7 +142,6 @@ export const MenuProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [darkMode]);
 
-
     
 	const value = {
     menuItems,
@@ -138,7 +152,11 @@ export const MenuProvider = ({ children }: { children: ReactNode }) => {
     setDarkMode,
     lightModeColor,
     darkModeColor,
+    habitWindowOpen,
+    setHabitWindowOpen,
+    timePickerWindowOpen,
+    setTimePickerWindowOpen,
   };
 	
-    return (<MenuContext.Provider value={value}> {children} </MenuContext.Provider>);
+    return (<UIContext.Provider value={value}> {children} </UIContext.Provider>);
 };

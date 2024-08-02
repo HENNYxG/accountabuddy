@@ -1,11 +1,11 @@
 import UserProfileSidebar from "../sidebar/user-profile-sidebar.component";
 import DayProgressCard from "./day-progress-card.component";
 import CalendarMUI from "../data-cards/calendar-visual-progress.component";
-import { MenuContext } from "../../contexts/menu.context";
+import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";
 
 const AllHabitsRightSidebar = () => {
-    const { darkMode, darkModeColor, lightModeColor } = useContext(MenuContext);
+    const { darkMode, darkModeColor, lightModeColor } = useContext(UIContext);
     return (
       <div
         style={{
