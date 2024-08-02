@@ -12,13 +12,13 @@ const DateContainerTop = () => {
         {/* date and arrows*/}
         <div className="flex gap-4 items-center">
           <div className="flex align-text-bottom">
-            <h2 className="font-semibold text-3xl">Sunday</h2>
-            <span className="font-light text-[1.6rem] flex align-bottom items-center">
+            <h2 className="font-semibold text-3xl max-sm:text-xl">Sunday</h2>
+            <span className="font-light text-[1.6rem] flex align-bottom items-center max-sm:text-base text-nowrap">
               , July 17 2024
             </span>
           </div>
 
-          <div className="flex gap-1 ml-4">
+          <div className="flex gap-1 ml-4 max-sm:-ml-1">
             <div className="text-customRed cursor-pointer">
               <ArrowLeftCircleOutline
                 color="#FF0000"
@@ -41,10 +41,14 @@ const DateContainerTop = () => {
           <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm ">
             <PlusRoundedIcon color="#FFFFFF" width="20px" height="20px" />
             <span className="font-clash-medium">New Group</span>
-                </button>
-                
-          <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm "
-          onClick={()=>{setHabitWindowOpen(true);}}>
+          </button>
+
+          <button
+            className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm "
+            onClick={() => {
+              setHabitWindowOpen(true);
+            }}
+          >
             <PlusRoundedIcon color="#FFFFFF" width="20px" height="20px" />
             <span className="font-clash-medium">New Habit</span>
           </button>

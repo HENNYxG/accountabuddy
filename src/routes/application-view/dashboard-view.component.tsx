@@ -46,13 +46,12 @@ useEffect(() => {
           : lightModeColor.background,
       }}
       className="transition-all"
-
     >
       <Toaster />
       <div
-        className={`max-sm:flex grid h-screen w-screen overflow-y-hidden  transition-all ${
+        className={`max-sm:flex max-sm:grid-cols-1  grid h-screen w-screen overflow-y-hidden  transition-all ${
           expanded ? "grid-cols-[300px_auto]  " : "grid-cols-[80px_auto]"
-        }`}
+        } `}
       >
         <GridPattern
           width={30}
@@ -74,16 +73,10 @@ useEffect(() => {
         )}
       /> */}
         {/* <Sidebar /> */}
-        <SidebarTwo />
-        <div
-          // style={{
-          //   color: darkMode ? darkModeColor.text : lightModeColor.text,
-          //   backgroundColor: darkMode
-          //     ? darkModeColor.background
-          //     : lightModeColor.background,
-          // }}
-          className="max-sm:ml-20 flex flex-col w-full h-full overflow-y-auto  "
-        >
+        <div className="max-sm:hidden">
+          <SidebarTwo />
+        </div>
+        <div className="max-sm: flex flex-col w-full h-full overflow-y-auto  ">
           <Outlet />
         </div>
       </div>
