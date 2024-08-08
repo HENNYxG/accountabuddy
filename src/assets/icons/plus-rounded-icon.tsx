@@ -16,7 +16,7 @@ const PlusRoundedIcon = ({
       stroke={color}
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={2}
+      strokeWidth={3}
       d="M5 12h7m7 0h-7m0 0V5m0 7v7"
     ></path>
   </svg>

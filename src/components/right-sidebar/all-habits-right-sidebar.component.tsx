@@ -1,5 +1,5 @@
 import UserProfileSidebar from "../sidebar/user-profile-sidebar.component";
-import DayProgressCard from "./day-progress-card.component";
+import DayProgressCard from "../data-cards/day-progress-card.component";
 import CalendarMUI from "../data-cards/calendar-visual-progress.component";
 import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";

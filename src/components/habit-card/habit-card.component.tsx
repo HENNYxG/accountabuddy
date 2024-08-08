@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import BuddyIcon from "../../assets/icons/buddy-icon";
 import EllipsisHorizontalOutline from "../../assets/icons/ellipsis-horizontal-outline";
 import RunningIcon from "../../assets/icons/running-icon";
 import HabitIcon from "./habit-icon.component";
 import { PieChart, Pie, Cell } from "recharts";
 import { customCharcoal } from "../../utils/colors";
-
-
+import ShineBorder from "./shine-border.component";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRunning } from "@fortawesome/free-solid-svg-icons";
+import { UIContext } from "../../contexts/ui.context";
 
 
 const HabitCard = () => {
@@ -22,8 +24,16 @@ const HabitCard = () => {
     setIsHovered(false);
   };
 
+  const { darkMode } = useContext(UIContext);
+  
   return (
-    <div className="grid grid-rows-[1fr_2fr_3fr] w-[150px] h-[200px] items-center bg-[#e0dad1] rounded-3xl flex-col align-middle justify-center p-[20px] relative">
+   
+    <ShineBorder
+      className="grid grid-rows-[1fr_2fr_3fr] w-[150px] h-[200px] items-center bg-[#e0dad1] rounded-3xl flex-col align-middle justify-center p-[20px] relative"
+      color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+      borderWidth={3}
+      borderRadius={24}
+    >
       <div className="row-span-1 flex justify-between items-center align-middle  ">
         <div className="absolute left-3 top-3 rounded-full -m-1 p-1 hover:bg-black/10 ">
           <BuddyIcon color={customCharcoal} width="20px" height="20px" />
@@ -35,14 +45,14 @@ const HabitCard = () => {
           onMouseLeave={handleMouseLeave}
         >
           <EllipsisHorizontalOutline
-            color="#212121"
+            color={darkMode ? "#fff" : "#212121"}
             width="30px"
             height="30px"
             type={isHovered ? "full" : ""}
           />
         </div>
 
-        <div className="absolute right-3 top-3 text-customCharcoal font-medium text-sm pointer-events-none">
+        <div className="absolute right-3 top-3 text-customCharcoal dark:text-customIvory font-medium text-sm pointer-events-none">
           4 <span className="fire-icon">🔥</span>
         </div>
       </div>
@@ -69,16 +79,24 @@ const HabitCard = () => {
               className="fill-transparent stroke-white stroke-[10px]"
             ></circle>
           </svg> */}
-          <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-            <HabitIcon />
+          <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex-col ">
+            <FontAwesomeIcon
+              className={`text-[#000000] dark:text-customCha`}
+              icon={faRunning}
+              size={"4x"}
+              onClick={() => console.log("clicked")}
+            />
+            {/* <span className="flex -mb-2  justify-center">
+              1/3
+            </span> */}
           </div>
         </div>
       </div>
 
-      <div className="row-span-3 text-center text-customCharcoal font-medium">
+      <div className="row-span-3 text-center text-customCharcoal dark:text-customIvory font-medium">
         Habit Name
       </div>
-    </div>
+    </ShineBorder>
   );
 };
 

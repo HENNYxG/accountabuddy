@@ -3,7 +3,7 @@ import { SidebarTwo } from "../../components/sidebar/sidebar.component";
 const TrendsPage = () => {
   return (
     <>
-         <SidebarTwo />
+
     </>
  
     // <div className="w-100vw h-100vh ">

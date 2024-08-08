@@ -2,13 +2,20 @@ import { useContext } from "react";
 import { UIContext } from "../../contexts/ui.context";
 
 const BuddyIcon = ({ color = "#000000", width = "64px", height = "64px" }) => {
-  const { darkMode, lightModeColor, darkModeColor } = useContext(UIContext);
+  const { darkMode, lightModeColor, darkModeColor, menuItems } = useContext(UIContext);
   let responsiveColor = "";
-  if (darkMode === true) {
-    responsiveColor = darkModeColor.iconColor;
-  } else {
-    responsiveColor = lightModeColor.iconColor;
-  }
+    darkMode
+      ? !menuItems[2].isSelected
+        ? (responsiveColor = darkModeColor.iconColor)
+        : (responsiveColor = lightModeColor.iconColor)
+      : (responsiveColor = lightModeColor.iconColor);
+
+  
+  // if (darkMode === true) {
+  //   responsiveColor = darkModeColor.iconColor;
+  // } else {
+  //   responsiveColor = lightModeColor.iconColor;
+  // }
 
     return (
       <svg

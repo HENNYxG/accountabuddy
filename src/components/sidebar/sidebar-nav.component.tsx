@@ -30,7 +30,7 @@ const SidebarNav = () => {
 
 
 export function SingleMenuItem({ menuItemProp }: { menuItemProp: menuItemType }) {
-     const { menuItems, setMenuItems, expanded } = useContext(UIContext);    
+     const { menuItems, setMenuItems, expanded, darkMode } = useContext(UIContext);    
      
         const handleMenuCLick = () => {
           const menuListCopy = menuItems.map((menuItem) => {
@@ -49,8 +49,8 @@ export function SingleMenuItem({ menuItemProp }: { menuItemProp: menuItemType })
         className={`flex gap-2 items-center px-3 py-4 mb-2 cursor-pointer rounded-md 
         ${
           menuItemProp.isSelected
-            ? "bg-customGreen text-black"
-            : " hover:bg-gray-200 transition"
+            ? "bg-customGreen text-black" 
+            : " hover:bg-gray-200 transition dark:hover:bg-gray-700"
         }`}
       >
         <span className="h-7 w-7 flex items-center"> {menuItemProp.icon}</span>

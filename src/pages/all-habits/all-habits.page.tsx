@@ -10,6 +10,8 @@ import DarkMode from "../../components/dark-mode-toggle.component";
 import DateContainerTop from "../../components/filter-containers/date-container-top.component";
 import AllHabitsRightSidebar from "../../components/right-sidebar/all-habits-right-sidebar.component";
 import HabitWindow from "../../components/habit-window/habit-window.component";
+import useMediaQuery from "../../utils/mediaquery";
+import HamburgerMenu from "../../components/ui-elements/hamburger-menu.component";
 
 const AllHabitsPage = () => {
 
@@ -50,12 +52,13 @@ const RightSideBar = () => {
 const TopWelcomeBar = () => {
       const { darkMode, darkModeColor, lightModeColor } =
         useContext(UIContext);
+  const isMobile = useMediaQuery('(max-width: 640px)');
   return (
     <div
       style={{
         color: darkMode ? darkModeColor.text : lightModeColor.text,
         backgroundColor: darkMode
-          ? darkModeColor.background
+          ? darkModeColor.secondaryBackground
           : lightModeColor.secondaryBackground,
       }}
       className=" bg-white p-5 rounded-md flex justify-between"
@@ -102,8 +105,9 @@ const TopWelcomeBar = () => {
           Welcome back
         </span> */}
         <div className="w-[50%] flex flex-col gap-3 align-middle center justify-between">
-          <div className="w-[50%] h-[50px]  flex">
-            <DarkMode />
+          <div className="w-[50%] h-[50px] flex">
+            {!isMobile ? (<DarkMode />): (<HamburgerMenu />) }
+
           </div>
         </div>
       </div>

@@ -8,7 +8,8 @@ import ChevronRightIcon from "../../assets/icons/chevron-right-icon";
 import TripleDotVertical from "../../assets/icons/triple-dot-vertical-icon";
 import { useContext } from "react";
 import { UIContext } from "../../contexts/ui.context";
-import { menuItemType } from "../../types/menuItemType";
+import MobileDarkModeToggle from "../ui-elements/dark-mode-mobile.component";
+
 
 
 
@@ -76,7 +77,11 @@ export const SidebarTwo = () => {
     };
 
   return (
-    <aside className=" h-full overscroll-y-auto py-2 max-sm:absolute max-sm:z-10">
+    <aside
+      className={` h-full overscroll-y-auto py-2 max-sm:absolute max-sm:z-10 transition ${
+        expanded ? "" : "max-sm:hidden"
+      }`}
+    >
       <nav
         style={{
           color: darkMode ? darkModeColor.text : lightModeColor.text,
@@ -117,7 +122,7 @@ export const SidebarTwo = () => {
 
         {/* Top User Profile BAdge */}
 
-        <div className="w-full -mt-5 flex justify-center ">
+        <div className="w-full -mt-5 flex justify-center  ">
           {expanded ? (
             <UserProfileSidebar />
           ) : (
@@ -132,19 +137,24 @@ export const SidebarTwo = () => {
           )}
         </div>
 
+        {/* Mobile Dark Mode*/}
+        {expanded && (
+          <div className="flex justify-center p-2">
+            <MobileDarkModeToggle />
+          </div>) }
+
         {/* Menu Items */}
 
         <ul className="flex-1 px-3.5 leading-4 pt-[10%] ">
           <SidebarNav />
         </ul>
-        <div className=" pb-2 px-3.5 leading-4 pt-[10%] ">
+        <div className=" pb-2 px-3.5 leading-4 pt-[10%] max-sm:pt-0 max-sm:-mt-3 ">
           <LogOutButton />
         </div>
 
         {/* bottom user profile */}
-
         <div
-          className={`border-t dark:border-gray-700 dark:border-opacity-70 transition-all flex p-3 ${
+          className={`border-t dark:border-gray-700 dark:border-opacity-70 transition-all flex p-3 max-sm:hidden ${
             expanded ? "" : "justify-center"
           }`}
         >
@@ -168,7 +178,7 @@ export const SidebarTwo = () => {
               </span>
             </div>
             <div className="flex align-center justify-center p-1.5 rounded-full hover:bg-gray-100 transition-all hover:cursor-pointer">
-              <TripleDotVertical color="#000" width="20px" height="20px" />
+              <TripleDotVertical color={darkMode ? "#fff" : "#000"} width="20px" height="20px" />
             </div>
           </div>
         </div>

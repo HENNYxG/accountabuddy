@@ -7,7 +7,7 @@ import HabitsTabIcon from "../assets/icons/habits-tab-icon";
 import BuddyIcon from '../assets/icons/buddy-icon';
 import AnalysisIcon from '../assets/icons/analysis-icon';
 import ChatIcon from '../assets/icons/chat-icon';
-
+import useMediaQuery from '../utils/mediaquery';
 
 
 const expandedLogic = () => {
@@ -49,7 +49,10 @@ export const UIContext = createContext({
   habitWindowOpen: false,
   setHabitWindowOpen: (habitWindowOpen: boolean) => {},
   timePickerWindowOpen: false,
-  setTimePickerWindowOpen: (timePickerWindowOpen: boolean) => {},
+  setTimePickerWindowOpen: (timePickerWindowOpen: boolean) => { },
+  mobileMenuIsOpen: false,
+  setMobileMenuIsOpen: (mobileMenuIsOpen: boolean) => { },
+  mobileWebsiteView: null,
 });
 
 
@@ -142,6 +145,23 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [darkMode]);
 
+  const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
+
+  const mobileWebsiteView = useMediaQuery('(max-width: 640px)');
+      
+
+ 
+    useEffect(() => {
+      if (mobileWebsiteView) {
+        if (expanded) {
+          setMobileMenuIsOpen(true);
+        } else {
+          setMobileMenuIsOpen(false);
+        }
+      }
+    }, [expanded])
+
+
     
 	const value = {
     menuItems,
@@ -156,6 +176,9 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
     setHabitWindowOpen,
     timePickerWindowOpen,
     setTimePickerWindowOpen,
+    mobileMenuIsOpen,
+    setMobileMenuIsOpen,
+    mobileWebsiteView,
   };
 	
     return (<UIContext.Provider value={value}> {children} </UIContext.Provider>);

@@ -6,13 +6,20 @@ const DashboardIcon = ({
   width = "64px",
   height = "64px",
 }) => {
-  const { darkMode, lightModeColor, darkModeColor } = useContext(UIContext);
+  const { darkMode, lightModeColor, darkModeColor, menuItems } = useContext(UIContext);
+
   let responsiveColor = "";
-  if (darkMode === true) {
-    responsiveColor = darkModeColor.iconColor;
-  } else {
-    responsiveColor = lightModeColor.iconColor;
-  }
+  darkMode ? !menuItems[0].isSelected ?
+    responsiveColor = darkModeColor.iconColor :
+    responsiveColor = lightModeColor.iconColor : 
+    responsiveColor = lightModeColor.iconColor
+
+
+  // if (darkMode === true) {
+  //   responsiveColor = darkModeColor.iconColor;
+  // } else {
+  //   responsiveColor = lightModeColor.iconColor;
+  // }
   return (
     <svg
       fill={responsiveColor}

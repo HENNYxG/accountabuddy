@@ -8,14 +8,14 @@ const iconSize = "80px";
 const iconColor = "#000";
 
 const LogOutButton = () => {
-  const { expanded } = useContext(UIContext);
+  const { expanded, darkMode } = useContext(UIContext);
   const {signOut} = useClerk();
     return (
       <div
         className={
           expanded
-            ? "flex gap-2 items-center px-3 py-4 mb-2 mt-[2%] cursor-pointer rounded-md hover:bg-red-200 transition"
-            : "flex gap-2 items-center  pl-2 py-3 cursor-pointer rounded-md hover:bg-red-200 transition"
+            ? "flex gap-2 items-center px-3 py-4 mb-2 mt-[2%] cursor-pointer rounded-md hover:bg-red-200 transition dark:hover:bg-red-600 "
+            : "flex gap-2 items-center  pl-2 py-3 cursor-pointer rounded-md hover:bg-red-200 transition dark:hover:bg-red-600"
         }
         onClick={() => signOut({ redirectUrl: "/" })}
       >
@@ -23,7 +23,7 @@ const LogOutButton = () => {
           <SignOutIconTwo
             width={iconSize}
             height={iconSize}
-            color={iconColor}
+            color={darkMode ? "#ffffff" : "#000000"}
           />
         </span>
         <div className=" w-full h-full">

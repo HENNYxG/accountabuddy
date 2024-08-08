@@ -8,8 +8,8 @@ const HabitGroup = () => {
 
     return (
       <div>
-        <div className="bg-white/40 shadow-sm ring-1 backdrop-blur-md ring-black/5   p-3 rounded-2xl w-full flex flex-col relative">
-          <DotPattern
+        <div className="bg-white/40 shadow-md ring-1 backdrop-blur-sm ring-black/5 p-3 rounded-2xl w-full flex flex-col relative dark:bg-[#1a1a21]/80">
+          {/* <DotPattern
             width={20}
             height={20}
             cx={1}
@@ -18,7 +18,7 @@ const HabitGroup = () => {
             className={cn(
               "opacity-25 [mask-image:linear-gradient(to_bottom_right,transparent,white,white,transparent)] "
             )}
-          />
+          /> */}
           {/* <GridPattern
             width={30}
             height={30}

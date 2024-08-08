@@ -58,8 +58,11 @@ useEffect(() => {
           height={30}
           x={-1}
           y={-1}
-          strokeDasharray={"4 2"}
-          className="color-black"
+          // strokeDasharray={"4 2"}
+          // className="color-black"
+          className={cn(
+            "[mask-image:radial-gradient(ellipse_at_center,black,transparent_90%)] color-black"
+          )}
         />
 
         {/* <DotPattern
@@ -76,6 +79,12 @@ useEffect(() => {
         <div className="max-sm:hidden">
           <SidebarTwo />
         </div>
+
+        {/* <Sidebar Mobile/> */}
+        <div className="= hidden max-sm:flex">
+          <SidebarTwo />
+        </div>
+        
         <div className="max-sm: flex flex-col w-full h-full overflow-y-auto  ">
           <Outlet />
         </div>

@@ -3,6 +3,7 @@ import ArrowRightCircleOutline from "../../assets/icons/arrow-right-circle-outli
 import PlusRoundedIcon from "../../assets/icons/plus-rounded-icon";
 import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";
+import DashedButton from "../buttons/dashed-button.component";
 
 // habitscontainertop
 const DateContainerTop = () => {
@@ -38,12 +39,12 @@ const DateContainerTop = () => {
         </div>
         {/* New Habit*/}
         <div className="flex gap-2">
-          <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm ">
+          {/* <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm ">
             <PlusRoundedIcon color="#FFFFFF" width="20px" height="20px" />
             <span className="font-clash-medium">New Group</span>
-          </button>
+          </button> */}
 
-          <button
+          {/* <button
             className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm "
             onClick={() => {
               setHabitWindowOpen(true);
@@ -51,7 +52,14 @@ const DateContainerTop = () => {
           >
             <PlusRoundedIcon color="#FFFFFF" width="20px" height="20px" />
             <span className="font-clash-medium">New Habit</span>
-          </button>
+          </button> */}
+
+          <DashedButton className="flex gap-2 items-center" onClick={() => {
+              setHabitWindowOpen(true);
+            }}>
+            <PlusRoundedIcon color="#000000" width="23px" height="22px" />
+            New Habit
+          </DashedButton>
         </div>
       </div>
     );
