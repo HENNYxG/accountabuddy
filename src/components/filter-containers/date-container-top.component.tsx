@@ -11,7 +11,7 @@ const DateContainerTop = () => {
     return (
       <div className="p-3 flex justify-between items-center">
         {/* date and arrows*/}
-        <div className="flex gap-4 items-center">
+        {/* <div className="flex gap-4 items-center">
           <div className="flex align-text-bottom">
             <h2 className="font-semibold text-3xl max-sm:text-xl">Sunday</h2>
             <span className="font-light text-[1.6rem] flex align-bottom items-center max-sm:text-base text-nowrap">
@@ -36,9 +36,9 @@ const DateContainerTop = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         {/* New Habit*/}
-        <div className="flex gap-2">
+        <div className="flex-1 flex-row gap-2 justify-items-end items-end ">
           {/* <button className="flex gap-2 items-center bg-customRed text-white p-3 rounded-md text-sm ">
             <PlusRoundedIcon color="#FFFFFF" width="20px" height="20px" />
             <span className="font-clash-medium">New Group</span>
