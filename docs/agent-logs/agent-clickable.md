@@ -35,6 +35,10 @@ Pass 1: Affordances Inventory (initial)
 - Mini-spec: Removes friendship; confirmation inline; optimistic UI.
 - Acceptance: Row removed; backend deleted; undo within 5s optional.
 
+8) Friends Popover → Sent tab → Cancel
+- Mini-spec: Allow canceling a pending outgoing request.
+- Acceptance: Click Cancel removes request; backend deleted; toast confirms.
+
 8) Buddy Detail → Share Another Habit
 - Mini-spec: Opens share flow; pick habit; select rules; start date tomorrow; sends invite to buddy.
 - Acceptance: Invite appears to recipient; status pending until accepted; banner shows "Starts Tomorrow".
@@ -42,4 +46,9 @@ Pass 1: Affordances Inventory (initial)
 Notes
 - Wire up to Supabase: tables friend_requests, friends if absent; add RLS and seeds.
 - Use react-hot-toast for feedback.
+
+Implementation Notes (Friends)
+- Added social.service with: searchUsers, listFriendRequests, listFriends, send/accept/decline/cancel, removeFriend, block/report.
+- Wired Social page + FriendsPopover; added Cancel action; optimistic updates and toasts.
+- Created Supabase migrations for friend_requests, friends, user_blocks, user_reports with RLS.
 

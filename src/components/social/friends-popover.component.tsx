@@ -12,6 +12,7 @@ import {
   faDownload
 } from '@fortawesome/free-solid-svg-icons';
 import { Friend, FriendRequest, SocialSearchResult } from '../../types/social.types';
+import toast from 'react-hot-toast';
 
 interface FriendsPopoverProps {
   isVisible: boolean;
@@ -21,6 +22,7 @@ interface FriendsPopoverProps {
   onSendFriendRequest: (handle: string, message?: string) => Promise<void>;
   onAcceptFriendRequest: (requestId: string) => Promise<void>;
   onDeclineFriendRequest: (requestId: string) => Promise<void>;
+  onCancelFriendRequest?: (requestId: string) => Promise<void>;
   onRemoveFriend: (friendId: string) => Promise<void>;
   onGenerateInviteLink: () => Promise<string>;
   onGenerateQRCode: () => Promise<string>;
@@ -36,6 +38,7 @@ const FriendsPopover: React.FC<FriendsPopoverProps> = ({
   onSendFriendRequest,
   onAcceptFriendRequest,
   onDeclineFriendRequest,
+  onCancelFriendRequest,
   onRemoveFriend,
   onGenerateInviteLink,
   onGenerateQRCode
@@ -125,9 +128,10 @@ const FriendsPopover: React.FC<FriendsPopoverProps> = ({
       setInviteMessage('');
       setSearchQuery('');
       setSearchResults([]);
-      // Show success message
+      toast.success('Friend request sent');
     } catch (error) {
       console.error('Failed to send friend request:', error);
+      toast.error('Could not send friend request');
     }
   };
 
@@ -136,8 +140,10 @@ const FriendsPopover: React.FC<FriendsPopoverProps> = ({
       const link = await onGenerateInviteLink();
       setInviteLink(link);
       setShowInviteModal(true);
+      toast.success('Invite link generated');
     } catch (error) {
       console.error('Failed to generate invite link:', error);
+      toast.error('Could not generate invite link');
     }
   };
 
@@ -146,8 +152,10 @@ const FriendsPopover: React.FC<FriendsPopoverProps> = ({
       const qrData = await onGenerateQRCode();
       setQrCodeData(qrData);
       setShowQRModal(true);
+      toast.success('QR code ready');
     } catch (error) {
       console.error('Failed to generate QR code:', error);
+      toast.error('Could not generate QR code');
     }
   };
 
@@ -269,7 +277,17 @@ const FriendsPopover: React.FC<FriendsPopoverProps> = ({
                         </p>
                       </div>
                     </div>
-                    <span className="text-yellow-600 text-sm">Pending</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-yellow-600 text-sm">Pending</span>
+                      {onCancelFriendRequest && (
+                        <button
+                          onClick={() => onCancelFriendRequest(request.id)}
+                          className="text-red-600 hover:text-red-700 text-sm"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))
               )}

@@ -37,6 +37,17 @@ import BuddyDetail from '../../components/social/buddy-detail.component';
 import HamburgerMenu from '../../components/ui-elements/hamburger-menu.component';
 import { UIContext } from '../../contexts/ui.context';
 import useMediaQuery from '../../utils/mediaquery';
+import toast from 'react-hot-toast';
+import {
+  searchUsers as socialSearchUsers,
+  listFriendRequests,
+  listFriends,
+  sendFriendRequest as apiSendFriendRequest,
+  acceptFriendRequest as apiAcceptFriendRequest,
+  declineFriendRequest as apiDeclineFriendRequest,
+  cancelFriendRequest as apiCancelFriendRequest,
+  removeFriend as apiRemoveFriend
+} from '../../services/social.service';
 
 type SocialTab = 'buddies' | 'squads' | 'communities';
 type BuddySubTab = 'buddy' | 'challenges';
@@ -143,29 +154,112 @@ const SocialPage: React.FC = () => {
     ]);
   }, []);
 
+  // Load initial friend requests from API when popover opens
+  useEffect(() => {
+    if (showFriendsPopover) {
+      (async () => {
+        try {
+          const reqs = await listFriendRequests();
+          // Map API shape to FriendRequest type minimal
+          setFriendRequests(
+            (reqs || []).map((r) => ({
+              id: r.id,
+              senderId: r.requester_id,
+              recipientId: r.recipient_id,
+              status: r.status,
+              message: r.message,
+              createdAt: r.created_at,
+              updatedAt: r.updated_at,
+            }))
+          );
+        } catch (e) {
+          // ignore
+        }
+      })();
+    }
+  }, [showFriendsPopover]);
+
   // Social actions
-  const handleSendFriendRequest = async (handle: string, message?: string) => {
-    // Mock implementation
-    console.log('Sending friend request to:', handle, message);
-    // In real app, this would call the API
+  const handleSendFriendRequest = async (recipientId: string, message?: string) => {
+    try {
+      // Optimistic add to sent list
+      const optimistic: FriendRequest = {
+        id: `temp-${Date.now()}`,
+        senderId: 'me',
+        recipientId,
+        status: 'pending',
+        message,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      setFriendRequests((prev) => [optimistic, ...prev]);
+      const created = await apiSendFriendRequest(recipientId, message);
+      if (created) {
+        setFriendRequests((prev) =>
+          prev.map((r) => (r.id === optimistic.id ? {
+            id: created.id,
+            senderId: created.requester_id,
+            recipientId: created.recipient_id,
+            status: created.status,
+            message: created.message,
+            createdAt: created.created_at,
+            updatedAt: created.updated_at,
+          } : r))
+        );
+      }
+      toast.success('Friend request sent');
+    } catch (e) {
+      // rollback optimistic
+      setFriendRequests((prev) => prev.filter((r) => !r.id.startsWith('temp-')));
+      toast.error('Failed to send friend request');
+    }
   };
 
   const handleAcceptFriendRequest = async (requestId: string) => {
-    // Mock implementation
-    console.log('Accepting friend request:', requestId);
-    // In real app, this would call the API
+    try {
+      await apiAcceptFriendRequest(requestId);
+      setFriendRequests((prev) => prev.filter((r) => r.id !== requestId));
+      // Refresh friends list
+      try {
+        const apiFriends = await listFriends();
+        // We do not have full friend user payload here; keep existing demo list
+      } catch {}
+      toast.success('Friend request accepted');
+    } catch (e) {
+      toast.error('Failed to accept request');
+    }
   };
 
   const handleDeclineFriendRequest = async (requestId: string) => {
-    // Mock implementation
-    console.log('Declining friend request:', requestId);
-    // In real app, this would call the API
+    try {
+      await apiDeclineFriendRequest(requestId);
+      setFriendRequests((prev) => prev.filter((r) => r.id !== requestId));
+      toast('Request declined');
+    } catch (e) {
+      toast.error('Failed to decline request');
+    }
+  };
+
+  const handleCancelFriendRequest = async (requestId: string) => {
+    try {
+      await apiCancelFriendRequest(requestId);
+      setFriendRequests((prev) => prev.filter((r) => r.id !== requestId));
+      toast('Request canceled');
+    } catch (e) {
+      toast.error('Failed to cancel request');
+    }
   };
 
   const handleRemoveFriend = async (friendId: string) => {
-    // Mock implementation
-    setFriends(prev => prev.filter(f => f.id !== friendId));
-    // In real app, this would call the API
+    const prev = friends;
+    setFriends((f) => f.filter((x) => x.id !== friendId));
+    try {
+      await apiRemoveFriend(friendId);
+      toast.success('Removed friend');
+    } catch (e) {
+      setFriends(prev);
+      toast.error('Failed to remove friend');
+    }
   };
 
   const handleGenerateInviteLink = async (): Promise<string> => {
@@ -260,6 +354,7 @@ const SocialPage: React.FC = () => {
                         onSendFriendRequest={handleSendFriendRequest}
                         onAcceptFriendRequest={handleAcceptFriendRequest}
                         onDeclineFriendRequest={handleDeclineFriendRequest}
+                        onCancelFriendRequest={handleCancelFriendRequest}
                         onRemoveFriend={handleRemoveFriend}
                         onGenerateInviteLink={handleGenerateInviteLink}
                         onGenerateQRCode={handleGenerateQRCode}
