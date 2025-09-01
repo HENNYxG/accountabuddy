@@ -52,7 +52,7 @@ export const UIContext = createContext({
   setTimePickerWindowOpen: (timePickerWindowOpen: boolean) => { },
   mobileMenuIsOpen: false,
   setMobileMenuIsOpen: (mobileMenuIsOpen: boolean) => { },
-  mobileWebsiteView: null,
+  mobileWebsiteView: false,
 });
 
 

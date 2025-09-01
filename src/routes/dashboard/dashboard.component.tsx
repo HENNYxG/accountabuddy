@@ -4,7 +4,7 @@ import { UIContext } from "../../contexts/ui.context";
 
 import DashboardPage from "../../pages/dashboard-page/dashboard.page";
 import AllHabitsPage from "../../pages/all-habits/all-habits.page";
-import BuddyPage from "../../pages/buddy/buddy.page";
+import SocialPage from "../../pages/social/social.page";
 import TrendsPage from "../../pages/trends/trends.page";
 import ChatPage from "../../pages/chat/chat.page";
 import DotPattern from "../../components/backgrounds/dot-pattern-bg.component";
@@ -33,7 +33,7 @@ const Dashboard = () => {
       selectComponent = <AllHabitsPage />;
       break;
     case "Friends":
-      selectComponent = <BuddyPage />;
+      selectComponent = <SocialPage />;
       break;
     case "Trends":
       selectComponent = <TrendsPage />;
