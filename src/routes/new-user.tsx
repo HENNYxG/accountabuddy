@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import axios from "axios";
-import { useUser } from "@clerk/clerk-react";
+import { useSession } from "../contexts/session.context";
 
 
 type User = {
@@ -34,7 +34,7 @@ const createNewUser = async (user: User) => {
 
 
 const NewUser = () => {
-    const { user } = useUser();
+    const { user } = useSession();
     console.log(user)
     const hasUserBeenCreated = useRef(false);
 
@@ -44,15 +44,13 @@ const NewUser = () => {
         console.log("use effect launch");
         const mappedUser: User = {
           id: user.id,
-          email: user.primaryEmailAddress?.emailAddress || "",
-          name: user.fullName,
+          email: (user.email as any) || "",
+          name: (user.user_metadata as any)?.full_name || null,
           clerkId: user.id,
           createdAt: new Date(),
           updatedAt: new Date(),
-          emailAddresses: user.emailAddresses.map((email) => ({
-            emailAddress: email.emailAddress,
-          })),
-          username: user.username || "",
+          emailAddresses: [{ emailAddress: (user.email as any) || "" }],
+          username: (user.user_metadata as any)?.user_name || "",
         };
         createNewUser(mappedUser);
         hasUserBeenCreated.current = true;

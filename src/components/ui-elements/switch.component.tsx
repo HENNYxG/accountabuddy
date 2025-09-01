@@ -8,11 +8,11 @@ import Typography from "@mui/material/Typography";
 import { UIContext } from "../../contexts/ui.context";
 import { useContext } from "react";
 
-const darkmodeprovider = () => {
+// Keep for future usage; ensure hook/component naming rules are respected
+const useDarkModeFromContext = () => {
     const { darkMode } = useContext(UIContext);
     return darkMode;
-    
-}
+};
 
 const IOSSwitch = styled((props: SwitchProps) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />

@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { Component, Fragment, useEffect, useState,  } from 'react';
-import {UserButton} from "@clerk/clerk-react";
+import {UserButton} from "../../utils/clerk-shim";
 //import './Sidebare.style.scss';
 import { ReactComponent as HomeIcon } from "../../assets/home-icon.svg"
 import Sidebar, { SidebarTwo } from "../../components/sidebar/sidebar.component";

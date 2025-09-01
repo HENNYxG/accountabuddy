@@ -28,6 +28,7 @@ import TrendsPage from "./pages/trends/trends.page";
 
 //Import Providers
 import { UIProvider } from "./contexts/ui.context";
+// SessionProvider is applied in RootLayout
 import { HabitsProvider } from "./contexts/habits.context";
 
 // Import service worker

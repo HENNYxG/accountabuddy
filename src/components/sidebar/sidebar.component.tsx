@@ -1,4 +1,4 @@
-import { UserButton, useUser } from "@clerk/clerk-react";
+import { UserButton } from "../../utils/clerk-shim";
 import LogoAndName from "../logo-and-name/logo-and-name.component";
 import SidebarNav from "./sidebar-nav.component";
 import LogOutButton from "./sign-out-button.component";
@@ -9,6 +9,7 @@ import TripleDotVertical from "../../assets/icons/triple-dot-vertical-icon";
 import { useContext } from "react";
 import { UIContext } from "../../contexts/ui.context";
 import MobileDarkModeToggle from "../ui-elements/dark-mode-mobile.component";
+import { useSession } from "../../contexts/session.context";
 
 
 
@@ -64,7 +65,7 @@ export default Sidebar;
 
 
 export const SidebarTwo = () => {
-  const { user } = useUser();
+  const { user } = useSession();
   const { expanded, setExpanded, darkMode, darkModeColor, lightModeColor } =
     useContext(UIContext);
 
@@ -172,10 +173,8 @@ export const SidebarTwo = () => {
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">{user?.fullName}</h4>
-              <span className="text-xs text-gray-600">
-                {user?.emailAddresses[0].emailAddress}
-              </span>
+              <h4 className="font-semibold">{(user as any)?.user_metadata?.full_name || user?.email}</h4>
+              <span className="text-xs text-gray-600">{user?.email as any}</span>
             </div>
             <div className="flex align-center justify-center p-1.5 rounded-full hover:bg-gray-100 transition-all hover:cursor-pointer">
               <TripleDotVertical color={darkMode ? "#fff" : "#000"} width="20px" height="20px" />

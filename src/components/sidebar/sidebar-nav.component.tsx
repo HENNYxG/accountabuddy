@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { UIContext } from "../../contexts/ui.context";
 
 import { menuItemType } from "../../types/menuItemType";
-import { SignOutButton } from "@clerk/clerk-react";
+import { UserButton } from "../../utils/clerk-shim";
 
 
 

@@ -1,27 +1,15 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton } from "../utils/clerk-shim";
+import { SessionProvider } from "../contexts/session.context";
 import Navbar from "../components/navbar/navbar.component";
 
-const PUBLISHABLE_KEY = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY ?? "";
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
+// Clerk removed; using Supabase session provider
 
 export default function RootLayout() {
   const navigate = useNavigate();
 
   return (
-    <ClerkProvider
-      routerPush={(to) => navigate(to)}
-      routerReplace={(to) => navigate(to, { replace: true })}
-      publishableKey={PUBLISHABLE_KEY}
-    >
+    <SessionProvider>
       {/* <header className="header">
         <div>
           <SignedIn>
@@ -35,6 +23,6 @@ export default function RootLayout() {
       <main>
         <Outlet />
       </main>
-    </ClerkProvider>
+    </SessionProvider>
   );
 }

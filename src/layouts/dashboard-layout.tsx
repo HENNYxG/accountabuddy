@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../utils/clerk-shim";
 import { Outlet, useNavigate } from "react-router-dom";
 import DashboardView from "../routes/application-view/dashboard-view.component";
 import Spinner from "../components/spinner";
