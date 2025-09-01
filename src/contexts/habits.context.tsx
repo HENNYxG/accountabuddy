@@ -4,6 +4,7 @@ import { faFingerprint, faKaaba, faUserGroup, faRunning } from '@fortawesome/fre
 import { GroupType, HabitType } from "../types/habitsContextType";
 import { textToIcon } from "../components/icon-window/icon-data.component";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { createHabit, fetchHabits, recordHabitEvent } from "../services/habits.service";
 import toast from "react-hot-toast";
 
 type AddNewHabitType = {
@@ -30,27 +31,26 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
 
     const [allHabits, setAllHabits] = useState<HabitType[]>([]);
     useEffect(() => {
-        const fetchData = () => {
-            const allHabitsData = [
-                {
-                    _id: "",
-                    name: "",
-                    icon: textToIcon("faRunning") as IconProp,
-                    frequency: [{ type: "Daily", days: ["Everyday"], timesPerInterval: 1 }],
-                    isNotificationOn: false,
-                    notificationTime: "",
+        (async () => {
+            try {
+                const rows = await fetchHabits();
+                const mapped: HabitType[] = rows.map(r => ({
+                    _id: r.id,
+                    name: r.name,
+                    icon: textToIcon(r.icon || "faRunning") as IconProp,
+                    frequency: (r.frequency as any) || [],
+                    isNotificationOn: !!r.is_notification_on,
+                    notificationTime: r.notification_time || "",
                     group: [],
-                },
-            ];
-
-            setTimeout(() => {
-                setAllHabits(allHabitsData);
-            }, 1000);
-        }
-        fetchData();
+                }));
+                setAllHabits(mapped);
+            } catch (e) {
+                console.error(e);
+            }
+        })();
     }, []);
 
-    function addNewHabit({
+    async function addNewHabit({
         allHabits,
         setAllHabits,
         newHabit
@@ -58,9 +58,16 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
         allHabits: HabitType[];
         setAllHabits: React.Dispatch<React.SetStateAction<HabitType[]>>;
         newHabit: HabitType;
-        }) {
+    }) {
         try {
-            setAllHabits([...allHabits, newHabit]);
+            const created = await createHabit({
+                name: newHabit.name,
+                icon: (newHabit.icon as any)?.iconName || "faRunning",
+                frequency: newHabit.frequency,
+                is_notification_on: newHabit.isNotificationOn,
+                notification_time: newHabit.notificationTime,
+            });
+            setAllHabits([...allHabits, { ...newHabit, _id: created.id }]);
             toast.success("New habit added!");
         } catch (error) {
             toast.error("Something went wrong!");

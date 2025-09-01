@@ -9,6 +9,7 @@ import ShineBorder from "./shine-border.component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRunning } from "@fortawesome/free-solid-svg-icons";
 import { UIContext } from "../../contexts/ui.context";
+import { recordHabitEvent } from "../../services/habits.service";
 
 
 const HabitCard = () => {
@@ -84,7 +85,17 @@ const HabitCard = () => {
               className={`text-[#000000] dark:text-customCha`}
               icon={faRunning}
               size={"4x"}
-              onClick={() => console.log("clicked")}
+              role="button"
+              tabIndex={0}
+              onClick={async () => {
+                try { await recordHabitEvent({ habit_id: '', mood: 'happy' }); } catch (e) { console.error(e); }
+              }}
+              onKeyDown={async (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  try { await recordHabitEvent({ habit_id: '', mood: 'happy' }); } catch (err) { console.error(err); }
+                }
+              }}
             />
             {/* <span className="flex -mb-2  justify-center">
               1/3
