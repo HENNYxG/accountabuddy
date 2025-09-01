@@ -52,3 +52,13 @@ Implementation Notes (Friends)
 - Wired Social page + FriendsPopover; added Cancel action; optimistic updates and toasts.
 - Created Supabase migrations for friend_requests, friends, user_blocks, user_reports with RLS.
 
+Progress Log
+- 2025-09-01: Created branch `feat/agent-clickable/sweep`, initialized logs.
+- 2025-09-01: Logged initial affordances and mini-specs.
+- 2025-09-01: Implemented Friends flows; added `src/services/social.service.ts` and UI wiring; added Supabase migrations with RLS.
+- 2025-09-01: Build is green (warnings only). Pushed branch to origin. Open PR via GitHub UI: visit repository PRs and create from `feat/agent-clickable/sweep`.
+
+Next
+- Implement Share Habit invite flow with “Starts Tomorrow” banner and accept/decline.
+- Add minimal happy-path tests.
+
