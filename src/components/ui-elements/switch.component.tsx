@@ -5,14 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch, { SwitchProps } from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { UIContext } from "../../contexts/ui.context";
-import { useContext } from "react";
-
-const darkmodeprovider = () => {
-    const { darkMode } = useContext(UIContext);
-    return darkMode;
-    
-}
+// Note: remove invalid hook usage outside components
 
 const IOSSwitch = styled((props: SwitchProps) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
