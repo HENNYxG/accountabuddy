@@ -1,0 +1,596 @@
+// Complete AccountaBuddy Prisma Schema
+// Supports all UX features with proper relationships and RLS
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
+  relationMode = "prisma"
+}
+
+// ============================================================================
+// USER & PROFILE MODELS
+// ============================================================================
+
+model User {
+  id           String   @id @default(uuid())
+  handle       String   @unique // For @mentions
+  displayName  String   // Separate from name
+  email        String   @unique
+  name         String?
+  clerkId      String   @unique
+  avatarUrl    String?
+  timezone     String   @default("UTC")
+  pushToken    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Profile relationships
+  userSettings UserSettings?
+  
+  // Habit relationships
+  habits           Habit[]
+  habitGroups      HabitGroups[]
+  habitCompletions HabitCompletion[]
+  
+  // Social relationships
+  friendRequestsSent     FriendRequest[] @relation("Requester")
+  friendRequestsReceived FriendRequest[] @relation("Recipient")
+  friends1               Friend[]        @relation("User1")
+  friends2               Friend[]        @relation("User2")
+  
+  // Buddy relationships
+  buddyMemberships BuddyMember[]
+  
+  // Squad relationships
+  squadMemberships SquadMember[]
+  ledSquads        Squad[] @relation("SquadLeader")
+  
+  // Community relationships
+  communityMemberships CommunityMember[]
+  communityJoinRequests CommunityJoinRequest[]
+  
+  // Chat relationships
+  chatParticipations ChatParticipant[]
+  chatMessages       ChatMessage[]
+  messageReactions   MessageReaction[]
+  
+  // Feed relationships
+  posts        Post[]
+  postLikes    PostLike[]
+  postComments PostComment[]
+  
+  // Competition relationships
+  weeklyPoints WeeklyPoints[]
+  
+  // Sorting relationships
+  listSorts ListSort[]
+  
+  // Approval relationships
+  approvalsGiven Approval[] @relation("Approver")
+  
+  // Notifications
+  notifications Notification[]
+}
+
+model UserSettings {
+  id                String @id @default(uuid())
+  userId            String @unique
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  displayFullName   Boolean @default(true)
+  allowNotifications Boolean @default(true)
+  allowReminders    Boolean @default(true)
+  allowCompetitions Boolean @default(true)
+  privacyLevel      String  @default("friends") // public, friends, private
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================================
+// FRIEND SYSTEM
+// ============================================================================
+
+model FriendRequest {
+  id           String   @id @default(uuid())
+  requesterId  String
+  requester    User     @relation("Requester", fields: [requesterId], references: [id], onDelete: Cascade)
+  recipientId  String
+  recipient    User     @relation("Recipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  status       String   @default("pending") // pending, accepted, rejected
+  createdAt    DateTime @default(now())
+
+  @@unique([requesterId, recipientId])
+}
+
+model Friend {
+  id       String   @id @default(uuid())
+  user1Id  String
+  user1    User     @relation("User1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2Id  String
+  user2    User     @relation("User2", fields: [user2Id], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([user1Id, user2Id])
+}
+
+// ============================================================================
+// BUDDY SYSTEM (Multiple buddies allowed)
+// ============================================================================
+
+model BuddyPair {
+  id        String   @id @default(uuid())
+  name      String?
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  members BuddyMember[]
+  habitShares HabitShare[] @relation("BuddyPairShares")
+  weeklyPoints WeeklyPoints[] @relation("BuddyPairPoints")
+}
+
+model BuddyMember {
+  id           String    @id @default(uuid())
+  buddyPairId  String
+  buddyPair    BuddyPair @relation(fields: [buddyPairId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role         String    @default("member") // owner, member
+  joinedAt     DateTime  @default(now())
+
+  @@unique([buddyPairId, userId])
+}
+
+// ============================================================================
+// HABIT MODELS
+// ============================================================================
+
+model HabitGroups {
+  id        String @id @default(uuid())
+  groupName String
+  colorCode String
+  iconName  String
+  order     Int    @default(0)
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Relationships
+  habits Habit[]
+
+  @@unique([userId, id])
+}
+
+model Habit {
+  id          String   @id @default(uuid())
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  name        String
+  description String?
+  icon        String
+  cadenceJson Json     // Complex cadence rules
+  targetPerDay Int     @default(1)
+  isNegative  Boolean  @default(false)
+  cutoff      String?  // HH:MM format
+  graceMinutes Int     @default(0)
+  sortIndex   Int      @default(0)
+  isActive    Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Group relationship
+  groupId String?
+  group  HabitGroups? @relation(fields: [groupId], references: [id])
+  
+  // Relationships
+  verificationRules VerificationRules?
+  consequenceRules  ConsequenceRules?
+  completions       HabitCompletion[]
+  reminders         HabitReminder[]
+  shares            HabitShare[]
+  squadLinks        SquadLink[]
+  
+  @@unique([ownerId, id])
+}
+
+model VerificationRules {
+  id              String @id @default(uuid())
+  habitId         String @unique
+  habit           Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  
+  geofenceLat     Float?
+  geofenceLng     Float?
+  geofenceRadiusM Int?
+  minDwellSec     Int?
+  requirePhoto    Boolean @default(false)
+  requireVideo    Boolean @default(false)
+  requireApproval Boolean @default(false)
+  maxMediaSize    Int     @default(50) // MB
+}
+
+model ConsequenceRules {
+  id          String @id @default(uuid())
+  habitId     String @unique
+  habit       Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  
+  actions     Json?  // Array of consequence actions
+  dailyCap    Int?
+  monthlyCap  Int?
+  allowAppeal Boolean @default(false)
+}
+
+model HabitCompletion {
+  id         String   @id @default(uuid())
+  habitId    String
+  habit      Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  day        DateTime // Date only
+  count      Int      @default(1)
+  completedAt DateTime @default(now())
+  source     String   @default("manual") // manual, reminder, proof
+  proofUrls  String[] // Array of proof media URLs
+  emotion    String   @default("neutral") // happy, neutral, sad
+  notes      String?
+  
+  // Location data
+  latitude   Float?
+  longitude  Float?
+  address    String?
+  
+  // Approval data
+  proofApproved    Boolean?
+  proofApprovedBy  String?
+  proofApprovedAt  DateTime?
+  
+  // Relationships
+  approvals Approval[] @relation("CompletionApprovals")
+  
+  @@unique([habitId, userId, day])
+}
+
+model HabitReminder {
+  id        String   @id @default(uuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  
+  time      String   // HH:MM format
+  days      Int[]    @default([]) // 0-6 for Sunday-Saturday
+  enabled   Boolean  @default(true)
+  message   String?
+  
+  createdAt DateTime @default(now())
+}
+
+// ============================================================================
+// HABIT SHARING
+// ============================================================================
+
+model HabitShare {
+  id        String   @id @default(uuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  
+  scope     String   // 'pair', 'squad', 'community'
+  scopeId   String   // References buddy_pair_id, squad_id, or community_id
+  startDate DateTime // Always tomorrow
+  rulesJson Json?    // Cloned from inviter's rules
+  
+  createdAt DateTime @default(now())
+  
+  // Relationships for different scopes
+  buddyPair BuddyPair? @relation("BuddyPairShares", fields: [scopeId], references: [id])
+  squad     Squad?     @relation("SquadShares", fields: [scopeId], references: [id])
+  community Community? @relation("CommunityShares", fields: [scopeId], references: [id])
+}
+
+// ============================================================================
+// COMMUNITY MODELS
+// ============================================================================
+
+model Community {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  visibility  String   @default("public") // 'public', 'private_discoverable'
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relationships
+  members       CommunityMember[]
+  joinRequests  CommunityJoinRequest[]
+  squads        Squad[]
+  posts         Post[]
+  habitShares   HabitShare[] @relation("CommunityShares")
+  chatThreads   ChatThread[] @relation("CommunityChats")
+}
+
+model CommunityMember {
+  id          String    @id @default(uuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  role        String    @default("member") // 'admin', 'mod', 'member'
+  joinedAt    DateTime  @default(now())
+  
+  @@unique([communityId, userId])
+}
+
+model CommunityJoinRequest {
+  id          String    @id @default(uuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  message     String?
+  status      String    @default("pending") // 'pending', 'approved', 'rejected'
+  createdAt   DateTime  @default(now())
+  
+  @@unique([communityId, userId])
+}
+
+// ============================================================================
+// SQUAD MODELS
+// ============================================================================
+
+model Squad {
+  id          String   @id @default(uuid())
+  communityId String?
+  community   Community? @relation(fields: [communityId], references: [id])
+  
+  name        String
+  description String?
+  visibility  String   @default("invite") // 'public', 'invite'
+  leaderId    String?
+  leader      User?    @relation("SquadLeader", fields: [leaderId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relationships
+  members       SquadMember[]
+  squadHabits   SquadHabit[]
+  habitShares   HabitShare[] @relation("SquadShares")
+  weeklyPoints  WeeklyPoints[] @relation("SquadPoints")
+  chatThreads   ChatThread[] @relation("SquadChats")
+}
+
+model SquadMember {
+  id     String @id @default(uuid())
+  squadId String
+  squad  Squad @relation(fields: [squadId], references: [id], onDelete: Cascade)
+  userId String
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  role     String   @default("member") // 'owner', 'mod', 'member'
+  joinedAt DateTime @default(now())
+  
+  @@unique([squadId, userId])
+}
+
+model SquadHabit {
+  id          String   @id @default(uuid())
+  squadId     String
+  squad       Squad    @relation(fields: [squadId], references: [id], onDelete: Cascade)
+  
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  
+  // Relationships
+  squadLinks SquadLink[]
+}
+
+model SquadLink {
+  id            String     @id @default(uuid())
+  squadHabitId  String
+  squadHabit    SquadHabit @relation(fields: [squadHabitId], references: [id], onDelete: Cascade)
+  userHabitId   String
+  userHabit     Habit      @relation(fields: [userHabitId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([squadHabitId, userHabitId])
+}
+
+// ============================================================================
+// FEED SYSTEM
+// ============================================================================
+
+model Post {
+  id          String   @id @default(uuid())
+  type        String   // 'proof', 'update'
+  text        String?
+  media       String[] // Array of media URLs
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  likes    PostLike[]
+  comments PostComment[]
+  approvals Approval[] @relation("PostApprovals")
+}
+
+model PostLike {
+  id     String @id @default(uuid())
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([postId, userId])
+}
+
+model PostComment {
+  id     String @id @default(uuid())
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  text      String
+  createdAt DateTime @default(now())
+}
+
+// ============================================================================
+// APPROVAL SYSTEM
+// ============================================================================
+
+model Approval {
+  id          String   @id @default(uuid())
+  subjectType String   // 'completion', 'post'
+  subjectId   String
+  approverId  String?
+  approver    User?    @relation("Approver", fields: [approverId], references: [id])
+  
+  verdict     String   @default("pending") // 'approved', 'rejected', 'pending'
+  expiresAt   DateTime // Auto-approve at midnight submitter's TZ
+  
+  createdAt DateTime @default(now())
+  
+  // Relationships for different subject types
+  completionApprovals HabitCompletion[] @relation("CompletionApprovals")
+  postApprovals       Post[]            @relation("PostApprovals")
+}
+
+// ============================================================================
+// CHAT SYSTEM
+// ============================================================================
+
+model ChatThread {
+  id      String @id @default(uuid())
+  scope   String // 'dm', 'squad', 'community'
+  scopeId String // References appropriate table
+  
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  participants ChatParticipant[]
+  messages     ChatMessage[]
+  
+  // Scope relationships
+  squad     Squad?     @relation("SquadChats", fields: [scopeId], references: [id])
+  community Community? @relation("CommunityChats", fields: [scopeId], references: [id])
+}
+
+model ChatParticipant {
+  id       String     @id @default(uuid())
+  threadId String
+  thread   ChatThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  role     String   @default("member") // 'owner', 'mod', 'member'
+  joinedAt DateTime @default(now())
+  
+  @@unique([threadId, userId])
+}
+
+model ChatMessage {
+  id       String     @id @default(uuid())
+  threadId String
+  thread   ChatThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  content  String
+  media    String[]   // Array of media URLs
+  createdAt DateTime  @default(now())
+  
+  // Relationships
+  reactions MessageReaction[]
+}
+
+model MessageReaction {
+  id        String       @id @default(uuid())
+  messageId String
+  message   ChatMessage  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  emoji     String
+  createdAt DateTime     @default(now())
+  
+  @@unique([messageId, userId, emoji])
+}
+
+// ============================================================================
+// COMPETITION SYSTEM
+// ============================================================================
+
+model WeeklyPoints {
+  id        String   @id @default(uuid())
+  scope     String   // 'pair', 'squad'
+  scopeId   String   // References buddy_pair_id or squad_id
+  weekStart DateTime // Sunday in user's TZ
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  
+  // Scope relationships
+  buddyPair BuddyPair? @relation("BuddyPairPoints", fields: [scopeId], references: [id])
+  squad     Squad?     @relation("SquadPoints", fields: [scopeId], references: [id])
+  
+  @@unique([scope, scopeId, weekStart, userId])
+}
+
+// ============================================================================
+// SORTING SYSTEM
+// ============================================================================
+
+model ListSort {
+  id       String @id @default(uuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  list     String // 'habits', 'buddies', 'squads', 'communities'
+  itemId   String
+  position Int
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, list, itemId])
+}
+
+// ============================================================================
+// NOTIFICATION SYSTEM
+// ============================================================================
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      String   // reminder, approval, competition, social
+  title     String
+  message   String
+  data      Json?
+  
+  read      Boolean  @default(false)
+  sent      Boolean  @default(false)
+  sentAt    DateTime?
+  
+  createdAt DateTime @default(now())
+}
+

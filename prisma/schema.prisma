@@ -20,40 +20,62 @@ model User {
   email   String  @unique
   name    String?
   clerkId String  @unique
+  avatar  String?
+  timezone String @default("UTC")
+  pushToken String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //outbound link. one to many
+  // Habits
   habits Habit[]
   habitGroups HabitGroups[]
+  habitCompletions HabitCompletion[]
+  
+  // Social
+  buddies Buddy[]
+  buddyOf Buddy[] @relation("BuddyOf")
+  squads SquadMember[]
+  communities CommunityMember[]
+  
+  // Settings
   userSettings UserSettings[]
+  
+  // Notifications
+  notifications Notification[]
+  
+  // Competitions
+  competitions CompetitionParticipant[]
 }
 
 model UserSettings {
   id String @id @default(uuid())
-
-  displayFullName Boolean
-
+  displayFullName Boolean @default(true)
+  allowNotifications Boolean @default(true)
+  allowReminders Boolean @default(true)
+  allowCompetitions Boolean @default(true)
+  privacyLevel String @default("friends") // public, friends, private
+  
   //linking to foreign key
   userId String
   user User @relation(fields: [userId], references: [id])
 
-
-  
   @@unique([userId, id])
 }
 
 model HabitGroups {
   id String @id @default(uuid())
-
   groupName String
   color_code String
   icon_name String
+  order Int @default(0)
   
-   //linking to foreign key
+  //linking to foreign key
   userId String
   user User @relation(fields: [userId], references: [id])
+  
+  // Habits in this group
+  habits Habit[]
 
   @@unique([userId, id])
 }
@@ -61,29 +83,264 @@ model HabitGroups {
 model Habit {
   id String @id @default(uuid())
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   habitName String
+  description String?
   iconName String
   color String
-  isNegative Boolean
-  order Int
-
-
+  isNegative Boolean @default(false)
+  order Int @default(0)
+  
+  // Enhanced habit features
+  type String @default("binary") // binary, numeric
+  targetValue Float?
+  unit String?
+  streak Int @default(0)
+  totalCompletions Int @default(0)
+  isActive Boolean @default(true)
+  
+  // Cadence
+  cadenceType String @default("daily") // daily, weekly, custom
+  customDays Int[] @default([])
+  cutoffTime String? // HH:mm format
+  gracePeriod Int? // minutes
+  
+  // Proof settings
+  proofType String @default("none") // none, geo, photo, video, approval
+  proofRequired Boolean @default(false)
+  geoLatitude Float?
+  geoLongitude Float?
+  geoRadius Float? // meters
+  maxMediaSize Int @default(50) // MB
+  
   //linking to foreign key
   userId String
   user User @relation(fields: [userId], references: [id])
+  
+  // Group relationship
+  groupId String?
+  group HabitGroups? @relation(fields: [groupId], references: [id])
 
   //outbound reference
   entries HabitEntries[]
+  completions HabitCompletion[]
+  reminders HabitReminder[]
+  consequences HabitConsequence[]
+  shares HabitShare[]
+  
   @@unique([userId, id])
 }
 
 model HabitEntries {
   id String @id @default(uuid())
-
   habitName String
   habit Habit @relation(fields: [habitName], references: [id])
 
   @@unique([habitName, id])
+}
+
+model HabitCompletion {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  
+  habitId String
+  habit Habit @relation(fields: [habitId], references: [id])
+  
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  
+  date String // YYYY-MM-DD
+  emotion String @default("neutral") // happy, neutral, sad
+  value Float? // for numeric habits
+  notes String?
+  
+  // Proof data
+  proofType String?
+  proofData Json?
+  proofApproved Boolean?
+  proofApprovedBy String?
+  proofApprovedAt DateTime?
+  
+  // Location
+  latitude Float?
+  longitude Float?
+  address String?
+  
+  @@unique([habitId, date, userId])
+}
+
+model HabitReminder {
+  id String @id @default(uuid())
+  habitId String
+  habit Habit @relation(fields: [habitId], references: [id])
+  
+  time String // HH:mm format
+  days Int[] @default([]) // 0-6 for Sunday-Saturday
+  enabled Boolean @default(true)
+  message String?
+  
+  createdAt DateTime @default(now())
+}
+
+model HabitConsequence {
+  id String @id @default(uuid())
+  habitId String
+  habit Habit @relation(fields: [habitId], references: [id])
+  
+  description String
+  type String @default("custom") // monetary, time, custom
+  amount Float?
+  enabled Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+}
+
+model HabitShare {
+  id String @id @default(uuid())
+  habitId String
+  habit Habit @relation(fields: [habitId], references: [id])
+  
+  type String // buddy, squad, community
+  targetId String
+  enabled Boolean @default(true)
+  requireApproval Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+}
+
+// Social Models
+model Buddy {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  
+  buddyId String
+  buddy User @relation("BuddyOf", fields: [buddyId], references: [id])
+  
+  status String @default("pending") // pending, accepted, blocked
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, buddyId])
+}
+
+model Squad {
+  id String @id @default(uuid())
+  name String
+  description String?
+  isPublic Boolean @default(false)
+  inviteCode String? @unique
+  maxMembers Int @default(50)
+  
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  members SquadMember[]
+  competitions Competition[]
+}
+
+model SquadMember {
+  id String @id @default(uuid())
+  squadId String
+  squad Squad @relation(fields: [squadId], references: [id])
+  
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  
+  role String @default("member") // owner, admin, member
+  joinedAt DateTime @default(now())
+  
+  @@unique([squadId, userId])
+}
+
+model Community {
+  id String @id @default(uuid())
+  name String
+  description String?
+  isPublic Boolean @default(true)
+  isDiscoverable Boolean @default(true)
+  requireJoinMessage Boolean @default(false)
+  maxMembers Int @default(1000)
+  
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  members CommunityMember[]
+  competitions Competition[]
+}
+
+model CommunityMember {
+  id String @id @default(uuid())
+  communityId String
+  community Community @relation(fields: [communityId], references: [id])
+  
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  
+  role String @default("member") // owner, admin, moderator, member
+  joinMessage String?
+  joinedAt DateTime @default(now())
+  
+  @@unique([communityId, userId])
+}
+
+// Competition Models
+model Competition {
+  id String @id @default(uuid())
+  name String
+  description String?
+  startDate DateTime
+  endDate DateTime
+  scoringMethod String @default("completions") // completions, streak, emotion
+  tieBreaker String @default("time") // time, random
+  
+  squadId String?
+  squad Squad? @relation(fields: [squadId], references: [id])
+  
+  communityId String?
+  community Community? @relation(fields: [communityId], references: [id])
+  
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  participants CompetitionParticipant[]
+}
+
+model CompetitionParticipant {
+  id String @id @default(uuid())
+  competitionId String
+  competition Competition @relation(fields: [competitionId], references: [id])
+  
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  
+  score Int @default(0)
+  rank Int?
+  joinedAt DateTime @default(now())
+  
+  @@unique([competitionId, userId])
+}
+
+// Notification Models
+model Notification {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  
+  type String // reminder, approval, competition, social
+  title String
+  message String
+  data Json?
+  
+  read Boolean @default(false)
+  createdAt DateTime @default(now())
+  
+  // For push notifications
+  sent Boolean @default(false)
+  sentAt DateTime?
 }
 
